@@ -6,18 +6,17 @@
 """
 from datetime import date, datetime, timedelta
 
-# User's username and paypal email address, only used for putting together the invoice.
-Username = "QueenFluffyShadow"
+# User's username and PayPal email address, only used for putting together the invoice.
+Username = "TheFluffyQ"
 Email = "Belgarion270@gmail.com"
-os_dir_string = "/home/queen/Dropbox/ShoutRec/"
+os_dir_string = "/home/queen/Programs/shoutrec/Shout Logs/"
 
 
 class ShoutLog:
-    def __init__(self, weeks_back=0, pay_rate=0.10):
+    def __init__(self, pay_rate=0.10):
         self.rate = pay_rate
-        if date.today().weekday() == 6 and datetime.now().hour == 0:
-            weeks_back = 1
-        self.week_name = self.get_week_name(weeks_back)
+        self.week_name = self.get_week_name(1 if date.today().weekday() == 6 and datetime.now().hour == 0 else 0)
+        # Look for "last week" if Pacific time is still in last week relative to my time.
         self.filename = os_dir_string + self.week_name + '.klat'
         self.shouts = self.count_shouts()
         self.bugs = self.count_bug_reports()
@@ -169,7 +168,7 @@ class ShoutLog:
         try:
             log = open(self.filename, 'a')
 
-            log.write("[Test] " + self.timestamp() + "\n")
+            log.write("[Test] " + self.timestamp() + "\"" + input("Description of test: ") + "\"\n")
             self.tests += 1
 
             log.close()
