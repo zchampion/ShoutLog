@@ -1,7 +1,6 @@
 """
     Project:            Shout Wall Log Program (Linux)
     Programmer:         Zachary Champion
-    Date Last Updated:  6 September 2017
     Python Version:     3.5
 """
 from datetime import date, datetime, timedelta
@@ -25,7 +24,7 @@ class ShoutLog:
 
     def __str__(self):
         string = \
-            "Log:            " + self.filename + '\n' + \
+            "Log:            " + self.week_name + '\n' + \
             "Shouts:         " + str(self.shouts) + '{: >13}'.format(str(self.shouts/5.0) + '%\n')
 
         if self.bugs > 0:
@@ -257,7 +256,7 @@ if __name__ == "__main__":
     shoutLog = ShoutLog()
     print("Log file \'" + shoutLog.week_name + ".klat" + "\'. Shouts: " + str(shoutLog.shouts) + '\n')
 
-    cmd = raw_input("> ")
+    cmd = input("> ")
     while cmd != "/done":
 
         if cmd.lower() == "/log":
@@ -275,9 +274,9 @@ if __name__ == "__main__":
 
             prompt += '> '
 
-            log_cmd = raw_input(prompt)
+            log_cmd = input(prompt)
             while log_cmd == "":
-                log_cmd = raw_input(prompt)
+                log_cmd = input(prompt)
 
             while log_cmd.lower() != "/done":
                 shoutLog.write_log_entry(log_cmd)
@@ -296,15 +295,15 @@ if __name__ == "__main__":
 
                 prompt += '> '
 
-                log_cmd = raw_input(prompt)
+                log_cmd = input(prompt)
                 while log_cmd == "":
-                    log_cmd = raw_input(prompt)
+                    log_cmd = input(prompt)
 
         elif cmd.lower() == "/bug":
-            bug = raw_input("What's the bug? Tell me what's a-happenin'!\n")
+            bug = input("What's the bug? Tell me what's a-happenin'!\n")
 
             if bug.lower() != "/cancel":
-                rate = float(raw_input("What was the bounty on that bug's head? $"))
+                rate = float(input("What was the bounty on that bug's head? $"))
                 shoutLog.write_bug_report(bug, rate)
 
         elif cmd.lower() == "/test":
@@ -332,4 +331,4 @@ if __name__ == "__main__":
         else:
             print("Command not recognized.")
 
-        cmd = raw_input("\n> ")
+        cmd = input("\n> ")
