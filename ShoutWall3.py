@@ -4,11 +4,12 @@
     Python Version:     3.5
 """
 from datetime import date, datetime, timedelta
+import os
 
 # User's username and PayPal email address, only used for putting together the invoice.
 Username = "TheFluffyQ"
 Email = "Belgarion270@gmail.com"
-os_dir_string = "/home/queen/Programs/shoutrec/Shout Logs/"
+os_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 
 
 class ShoutLog:
