@@ -12,9 +12,10 @@ os_dir_string = "/home/queen/Programs/shoutrec/Shout Logs/"
 
 
 class ShoutLog:
-    def __init__(self, pay_rate=0.10):
+    def __init__(self, last_week=False, pay_rate=0.10):
         self.rate = pay_rate
-        self.week_name = self.get_week_name(1 if date.today().weekday() == 6 and datetime.now().hour == 0 else 0)
+        self.week_name = self.get_week_name(
+            1 if date.today().weekday() == 6 and datetime.now().hour == 0 or last_week else 0)
         # Look for "last week" if Pacific time is still in last week relative to my time.
         self.filename = os_dir_string + self.week_name + '.klat'
         self.shouts = self.count_shouts()
@@ -71,6 +72,7 @@ class ShoutLog:
 
     def count_bug_reports(self):
         bugs = 0
+
         try:
             read_bugs = open(self.filename)
 
@@ -82,26 +84,27 @@ class ShoutLog:
 
         except:
             print("Error counting the bug reports in file \"{}\".".format(self.filename))
-            return 0
 
-        return bugs
+        finally:
+            return bugs
 
     def count_tests(self):
         tests = 0
+
         try:
             read_tests = open(self.filename)
 
             for line in read_tests:
-                if line != "" and line.startswith("[test]"):
+                if line != "" and line.startswith("[Test]"):
                     tests += 1
 
             read_tests.close()
 
         except:
             print("Error counting the tests in file \"{}\".".format(self.filename))
-            return 0
 
-        return tests
+        finally:
+            return tests
 
     def get_invoice(self):
         invoice = self.shouts * self.rate
@@ -109,12 +112,13 @@ class ShoutLog:
         if invoice > 50:
             invoice = 50.0
 
-        invoice += self.get_bug_invoice() + self.tests * 5.0
+        invoice += self.get_bug_invoice() + self.get_test_invoice()
 
         return invoice
 
     def get_bug_invoice(self):
         invoice = 0.00
+
         try:
             log = open(self.filename)
 
@@ -126,8 +130,29 @@ class ShoutLog:
 
             log.close()
 
-        except:
+        except Exception as e:
             print("Error getting the \"bug invoice\" from the file (" + self.filename + ").")
+            print(str(e))
+
+        return invoice
+
+    def get_test_invoice(self):
+        invoice = 0.00
+
+        try:
+            log = open(self.filename)
+
+            for line in log:
+                line_items = line.split()
+
+                if line_items[0] == "[Test]":
+                    invoice += float(line_items[4])
+
+            log.close()
+
+        except Exception as e:
+            print("Error getting the \"bug invoice\" from the file (" + self.filename + ").")
+            print(str(e))
 
         return invoice
 
@@ -167,7 +192,8 @@ class ShoutLog:
         try:
             log = open(self.filename, 'a')
 
-            log.write("[Test] " + self.timestamp() + "\"" + input("Description of test: ") + "\"\n")
+            log.write("[Test] " + self.timestamp() + " " + input("Value of test: ") + " \"" +
+                      input("Description of test: ") + "\"\n")
             self.tests += 1
 
             log.close()
@@ -321,7 +347,7 @@ if __name__ == "__main__":
                 "/lost: insert a number of lines into the current log of lost shouts\n")
 
         elif cmd.lower() == "/finalize" or cmd.lower() == "/fin":
-            last_shoutLog = ShoutLog(1)
+            last_shoutLog = ShoutLog(last_week=True)
             last_shoutLog.finalize()
 
         elif cmd.lower() == "/lost":
