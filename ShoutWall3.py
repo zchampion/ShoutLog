@@ -9,7 +9,7 @@ import os
 # User's username and PayPal email address, only used for putting together the invoice.
 Username = "TheFluffyQ"
 Email = "Belgarion270@gmail.com"
-os_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
+log_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 
 
 class ShoutLog:
@@ -18,7 +18,7 @@ class ShoutLog:
         self.week_name = self.get_week_name(
             1 if date.today().weekday() == 6 and datetime.now().hour == 0 or last_week else 0)
         # Look for "last week" if Pacific time is still in last week relative to my time.
-        self.filename = os_dir_string + self.week_name + '.klat'
+        self.filename = log_dir_string + self.week_name + '.klat'
         self.shouts = self.count_shouts()
         self.bugs = self.count_bug_reports()
         self.tests = self.count_tests()
