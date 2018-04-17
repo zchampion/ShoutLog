@@ -275,87 +275,58 @@ class ShoutLog:
 
     # Create a function to manage the script rather than having it all in main.
 
+    def process_candi(self, candi):
+        """
+        Processes a single command.
+        :param candi: the command
+        :return: nothing
+        """
+        candi = candi.lower()
+
+        # Accept either / or . as command markers
+        if candi[0] == '/' or candi[0] == '.':
+            if candi[1:5] == "help":
+                print("/bug: log a bug report\n" +
+                      "/test: log a Shout Wall test attended\n" +
+                      "/summary: refresh the statistics and display the summary\n" +
+                      "/lost: insert a number of lines into the current log of lost shouts\n")
+
+            elif candi[1:4] == "fin":
+                ShoutLog(last_week=True).finalize()
+
+            elif candi[1:4] == "sum":
+                self.summarize()
+
+            elif candi[1:4] == "bug":
+                bug = input("What's the bug? Tell me what's a-happenin'!\n")
+
+                if bug.lower() != "/cancel":
+                    rate = float(input("What was the bounty on that bug's head? $"))
+                    self.write_bug_report(bug, rate)
+
+            elif candi[1:5] == "test":
+                self.write_test_entry()
+
+            elif candi[1:5] == "lost":
+                number_lost = int(input("Insert how many lost shouts?\n"))
+                self.insert_lost_shouts(number_lost)
+
+            else:
+                print("Command not recognized.")
+
+        # Otherwise, treat the string as a shout, but don't do anything for empty commands.
+        elif len(candi) > 0:
+            self.write_log_entry(candi)
+
 
 if __name__ == "__main__":
     print("**************************************************************\n" +
           "Shout Wall Log Python Model 2.0")
 
     shoutLog = ShoutLog()
-    print("Log file \'" + shoutLog.week_name + ".klat" + "\'. Shouts: " + str(shoutLog.shouts) + '\n')
+    print("Log file for " + shoutLog.week_name + ".")
 
-    cmd = input("> ")
+    cmd = input(str(shoutLog.shouts) + "> ")
     while cmd != "/done":
-
-        if cmd.lower() == "/log":
-            session = shoutLog.shouts
-
-            prompt = ""
-            if (session + 1) % 5 == 0:
-                if (session + 1) % 10 == 0:
-                    prompt += '0'
-                else:
-                    prompt += '5'
-
-            else:
-                prompt += '>'
-
-            prompt += '> '
-
-            log_cmd = input(prompt)
-            while log_cmd == "":
-                log_cmd = input(prompt)
-
-            while log_cmd.lower() != "/done":
-                shoutLog.write_log_entry(log_cmd)
-                session += 1
-
-                prompt = ""
-                if (session + 1) % 5 == 0:
-
-                    if (session + 1) % 10 == 0:
-                        prompt += '0'
-                    else:
-                        prompt += '5'
-
-                else:
-                    prompt += '>'
-
-                prompt += '> '
-
-                log_cmd = input(prompt)
-                while log_cmd == "":
-                    log_cmd = input(prompt)
-
-        elif cmd.lower() == "/bug":
-            bug = input("What's the bug? Tell me what's a-happenin'!\n")
-
-            if bug.lower() != "/cancel":
-                rate = float(input("What was the bounty on that bug's head? $"))
-                shoutLog.write_bug_report(bug, rate)
-
-        elif cmd.lower() == "/test":
-            shoutLog.write_test_entry()
-
-        elif cmd.lower() == "/summary" or cmd.lower() == "/sum":
-            shoutLog.summarize()
-
-        elif cmd.lower() == "/help" or cmd.lower() == "/cmd":
-            print(
-                "/log: write a shout log entry\n" +
-                "/bug: log a bug report\n" +
-                "/test: log a Shout Wall test attended\n" +
-                "/summary: refresh the statistics and display the summary\n" +
-                "/lost: insert a number of lines into the current log of lost shouts\n")
-
-        elif cmd.lower() == "/finalize" or cmd.lower() == "/fin":
-            last_shoutLog = ShoutLog(last_week=True)
-            last_shoutLog.finalize()
-
-        elif cmd.lower() == "/lost":
-            number_lost = int(input("Insert how many lost shouts?\n"))
-            shoutLog.insert_lost_shouts(number_lost)
-
-        else:
-            print("Command not recognized.")
-
-        cmd = input("\n> ")
+        shoutLog.process_candi(cmd)
+        cmd = input(str(shoutLog.shouts) + "> ")
