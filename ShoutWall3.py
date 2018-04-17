@@ -20,6 +20,7 @@ class ShoutLog:
         # Look for "last week" if Pacific time is still in last week relative to my time.
         self.filename = log_dir_string + self.week_name + '.klat'
         self.shouts = self.count_shouts()
+        self.starting = self.shouts  # Remember the number of starting shouts for the num of shouts in the session.
         self.bugs = self.count_bug_reports()
         self.tests = self.count_tests()
         self.invoice = self.get_invoice()
@@ -27,7 +28,8 @@ class ShoutLog:
     def __str__(self):
         string = \
             "Log:            " + self.week_name + '\n' + \
-            "Shouts:         " + str(self.shouts) + '{: >13}'.format(str(self.shouts/5.0) + '%\n')
+            "Shouts:         {0:3}{1: >7}%\n".format(self.shouts, self.shouts/5.0) + \
+            "  this session: {0:3}{1: >7}%\n".format(self.shouts - self.starting, (self.shouts - self.starting)/5.0)
 
         if self.bugs > 0:
             string += "Bug Reports:    " + str(self.bugs) + "\n"
