@@ -1,5 +1,5 @@
 """
-    Project:            Shout Wall Log Program (Linux)
+    Project:            Shout Wall Log Program
     Programmer:         Zachary Champion
     Python Version:     3.5
 """
