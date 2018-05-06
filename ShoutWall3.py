@@ -282,40 +282,42 @@ class ShoutLog:
         """
         candi = candi.lower()
 
-        # Accept either / or . as command markers
-        if candi[0] == '/' or candi[0] == '.':
-            if candi[1:5] == "help":
-                print("/bug: log a bug report\n" +
-                      "/test: log a Shout Wall test attended\n" +
-                      "/summary: refresh the statistics and display the summary\n" +
-                      "/lost: insert a number of lines into the current log of lost shouts\n")
+        # Accept either / or . as command markers, but only if there is something to read.
+        # This is so blank strings don't piss off the whole program.
+        if len(candi) > 0:
+            if candi[0] == '/' or candi[0] == '.':
+                if candi[1:5] == "help":
+                    print("/bug: log a bug report\n" +
+                          "/test: log a Shout Wall test attended\n" +
+                          "/summary: refresh the statistics and display the summary\n" +
+                          "/lost: insert a number of lines into the current log of lost shouts\n")
 
-            elif candi[1:4] == "fin":
-                ShoutLog(last_week=True).finalize()
+                elif candi[1:4] == "fin":
+                    ShoutLog(last_week=True).finalize()
 
-            elif candi[1:4] == "sum":
-                self.summarize()
+                elif candi[1:4] == "sum":
+                    self.summarize()
 
-            elif candi[1:4] == "bug":
-                bug = input("What's the bug? Tell me what's a-happenin'!\n")
+                elif candi[1:4] == "bug":
+                    bug = input("What's the bug? Tell me what's a-happenin'!\n")
 
-                if bug.lower() != "/cancel":
-                    rate = float(input("What was the bounty on that bug's head? $"))
-                    self.write_bug_report(bug, rate)
+                    if bug.lower() != "/cancel":
+                        rate = float(input("What was the bounty on that bug's head? $"))
+                        self.write_bug_report(bug, rate)
 
-            elif candi[1:5] == "test":
-                self.write_test_entry()
+                elif candi[1:5] == "test":
+                    self.write_test_entry()
 
-            elif candi[1:5] == "lost":
-                number_lost = int(input("Insert how many lost shouts?\n"))
-                self.insert_lost_shouts(number_lost)
+                elif candi[1:5] == "lost":
+                    number_lost = int(input("Insert how many lost shouts?\n"))
+                    self.insert_lost_shouts(number_lost)
 
+                else:
+                    print("Command not recognized.")
+
+            # Otherwise, treat the string as a shout.
             else:
-                print("Command not recognized.")
-
-        # Otherwise, treat the string as a shout, but don't do anything for empty commands.
-        elif len(candi) > 0:
-            self.write_log_entry(candi)
+                self.write_log_entry(candi)
 
 
 if __name__ == "__main__":
