@@ -243,19 +243,16 @@ class ShoutLog:
 
             invoice_string = '{:*^41}'.format(' Final Invoice ') + '\n' + \
                 "Shout Wall Invoice - Week of {}\n".format(self.week_name) + \
-                "Username: {}\n".format(Username) + \
-                "Paypal Email: {}\n".format(Email) + \
-                "Shouts Completed: {:3}".format(self.shouts) + '\n'
+                "Total amount requested: ${:.2f}\n".format(self.invoice) + \
+                "PayPal email address: {}\n".format(Email) + \
+                "Total shouts completed: {:3}\n".format(self.shouts) + \
+                "Username(s) used: {}\n".format(Username)
 
             if self.bugs > 0:
                 invoice_string += "Bug Reports: " + str(self.bugs) + '\n'
 
             if self.tests > 0:
                 invoice_string += "Shout Wall Tests: " + str(self.tests) + '\n'
-
-            invoice_string += \
-                "Paypal Amount: $" + '{:.2f}'.format(self.invoice) + '\n' + \
-                "*" * 41
 
             try:
                 log = open(self.filename, 'w')
