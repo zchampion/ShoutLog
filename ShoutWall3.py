@@ -7,7 +7,7 @@ from datetime import date, datetime, timedelta
 import os
 
 # User's username and PayPal email address, only used for putting together the invoice.
-Usernames = ["TheFluffyQ"]
+default_username = "TheFluffyQ"
 Email = "Belgarion270@gmail.com"
 log_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 
@@ -18,7 +18,10 @@ class ShoutLog:
         self.week_name = self.get_week_name(
             1 if date.today().weekday() == 6 and datetime.now().hour == 0 or last_week else 0)
         # Look for "last week" if Pacific time is still in last week relative to my time.
+
         self.filename = log_dir_string + self.week_name + '.klat'
+
+        self.usernames = self.load_usernames()
         self.shouts = self.count_shouts()
         self.starting = self.shouts  # Remember the number of starting shouts for the num of shouts in the session.
         self.bugs = self.count_bug_reports()
@@ -157,7 +160,7 @@ class ShoutLog:
             log.close()
 
         except Exception as e:
-            print("Error getting the \"bug invoice\" from the file (" + self.filename + ").")
+            print("Error getting the \"test invoice\" from the file (" + self.filename + ").")
             print(str(e))
 
         return invoice
@@ -209,6 +212,34 @@ class ShoutLog:
             print("Error opening the file (" + self.filename + ").")
             print(str(e))
 
+    def write_username(self, username):
+        try:
+            log = open(self.filename, 'a')
+            log.write("[USERNAME] {}\n".format(username))
+            log.close()
+
+            self.usernames.append(username)
+
+        except Exception as e:
+            print("Error opening the file (" + self.filename + ").")
+            print(str(e))
+
+    def load_usernames(self):
+        usernames = [default_username]
+
+        try:
+            log = open(self.filename)
+
+            for line in log:
+                if line.startswith("[USERNAME]"):
+                    usernames.append(line.split()[1])
+
+        except Exception as e:
+            print("Error opening the file (" + self.filename + ").")
+            print(str(e))
+
+        return usernames
+
     def summarize(self):
         self.shouts = self.count_shouts()
         self.bugs = self.count_bug_reports()
@@ -251,7 +282,7 @@ class ShoutLog:
                 "Total amount requested: ${:.2f}\n".format(self.invoice) + \
                 "PayPal email address: {}\n".format(Email) + \
                 "Total shouts completed: {:3}\n".format(self.shouts) + \
-                "Username(s) used: {}\n".format(", ".join(Usernames))
+                "Username(s) used: {}\n".format(", ".join(self.usernames))
 
             if self.bugs > 0:
                 invoice_string += "Bug Reports: " + str(self.bugs) + '\n'
@@ -317,6 +348,9 @@ class ShoutLog:
                 elif candi[1:5] == "lost":
                     number_lost = int(input("Insert how many lost shouts?\n"))
                     self.insert_lost_shouts(number_lost)
+
+                elif candi[1:5] == "addu":
+                    self.write_username(input("Username to add: "))
 
                 else:
                     print("Command not recognized.")
