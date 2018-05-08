@@ -7,7 +7,7 @@ from datetime import date, datetime, timedelta
 import os
 
 # User's username and PayPal email address, only used for putting together the invoice.
-Username = "TheFluffyQ"
+Usernames = ["TheFluffyQ"]
 Email = "Belgarion270@gmail.com"
 log_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 
@@ -61,8 +61,9 @@ class ShoutLog:
         try:
             read_shouts = open(self.filename)
 
-        except:
+        except Exception as e:
             print("Error opening the file \"" + self.filename + "\"")
+            print(str(e))
             self.create_new_log()
             return 0
 
@@ -85,8 +86,9 @@ class ShoutLog:
 
             read_bugs.close()
 
-        except:
+        except Exception as e:
             print("Error counting the bug reports in file \"{}\".".format(self.filename))
+            print(str(e))
 
         finally:
             return bugs
@@ -103,8 +105,9 @@ class ShoutLog:
 
             read_tests.close()
 
-        except:
+        except Exception as e:
             print("Error counting the tests in file \"{}\".".format(self.filename))
+            print(str(e))
 
         finally:
             return tests
@@ -188,8 +191,9 @@ class ShoutLog:
 
             log.close()
 
-        except:
+        except Exception as e:
             print("Error opening the file (" + self.filename + ").")
+            print(str(e))
 
     def write_test_entry(self):
         try:
@@ -201,8 +205,9 @@ class ShoutLog:
 
             log.close()
 
-        except:
+        except Exception as e:
             print("Error opening the file (" + self.filename + ").")
+            print(str(e))
 
     def summarize(self):
         self.shouts = self.count_shouts()
@@ -246,7 +251,7 @@ class ShoutLog:
                 "Total amount requested: ${:.2f}\n".format(self.invoice) + \
                 "PayPal email address: {}\n".format(Email) + \
                 "Total shouts completed: {:3}\n".format(self.shouts) + \
-                "Username(s) used: {}\n".format(Username)
+                "Username(s) used: {}\n".format(", ".join(Usernames))
 
             if self.bugs > 0:
                 invoice_string += "Bug Reports: " + str(self.bugs) + '\n'
@@ -262,8 +267,9 @@ class ShoutLog:
 
                 log.close()
 
-            except:
+            except Exception as e:
                 print("Error opening the file.")
+                print(str(e))
 
         else:
             print("Log \'{}\' already finalized.".format(self.filename))
