@@ -134,7 +134,7 @@ class ShoutLog:
             for line in log:
                 line_items = line.split()
 
-                if line_items[0].lower() == "[bug]":
+                if len(line_items) > 0 and line_items[0].lower() == "[bug]":
                     invoice += float(line_items[1])
 
             log.close()
@@ -154,7 +154,7 @@ class ShoutLog:
             for line in log:
                 line_items = line.split()
 
-                if line_items[0] == "[Test]":
+                if len(line_items) > 0 and line_items[0] == "[Test]":
                     invoice += float(line_items[4])
 
             log.close()
