@@ -309,7 +309,21 @@ class ShoutLog:
         for _ in range(num):
             self.write_log_entry("-lost shout-")
 
-    # Create a function to manage the script rather than having it all in main.
+    def read_log(self):
+
+        try:
+            log = open(self.filename)
+
+            print()
+            for line in log:
+                print(line.rstrip())
+            print()
+
+            log.close()
+
+        except Exception as e:
+            print("Error reading the file \"{}\".".format(self.filename))
+            print(str(e))
 
     def process_candi(self, candi):
         """
@@ -351,6 +365,9 @@ class ShoutLog:
 
                 elif candi[1:5] == "addu":
                     self.write_username(input("Username to add: "))
+
+                elif candi[1:5] == "read":
+                    self.read_log()
 
                 else:
                     print("Command not recognized.")
