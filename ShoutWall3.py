@@ -385,7 +385,7 @@ if __name__ == "__main__":
     shoutLog = ShoutLog()
     print("Log file for " + shoutLog.week_name + ".")
 
-    cmd = input(str(shoutLog.shouts) + "> ")
+    cmd = input("{:3d}".format(shoutLog.shouts) + "> ")
     while cmd != "/done":
         shoutLog.process_candi(cmd)
-        cmd = input(str(shoutLog.shouts) + "> ")
+        cmd = input("{:3d}".format(shoutLog.shouts) + "> ")
