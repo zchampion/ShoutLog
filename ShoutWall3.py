@@ -13,10 +13,10 @@ log_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 
 
 class ShoutLog:
-    def __init__(self, last_week=False, pay_rate=0.10):
+    def __init__(self, weeks_back=0, pay_rate=0.10):
         self.rate = pay_rate
         self.week_name = self.get_week_name(
-            1 if date.today().weekday() == 6 and datetime.now().hour == 0 or last_week else 0)
+            1 if date.today().weekday() == 6 and datetime.now().hour == 0 or weeks_back == 1 else 0)
         # Look for "last week" if Pacific time is still in last week relative to my time.
 
         self.filename = log_dir_string + self.week_name + '.klat'
@@ -333,48 +333,49 @@ class ShoutLog:
         """
         candi = candi.lower()
 
-        # Accept either / or . as command markers, but only if there is something to read.
+        # Accept / as command markers, but only if there is something to read.
         # This is so blank strings don't piss off the whole program.
-        if len(candi) > 0:
-            if candi[0] == '/' or candi[0] == '.':
-                if candi[1:5] == "help":
-                    print("/bug: log a bug report\n" +
-                          "/test: log a Shout Wall test attended\n" +
-                          "/summary: refresh the statistics and display the summary\n" +
-                          "/lost: insert a number of lines into the current log of lost shouts\n")
+        if len(candi) > 0 and candi[0] == '/':
+            if candi[1:5] == "help":
+                print("/bug: log a bug report\n" +
+                      "/test: log a Shout Wall test attended\n" +
+                      "/summary: refresh the statistics and display the summary\n" +
+                      "/lost: insert a number of lines into the current log of lost shouts\n")
 
-                elif candi[1:4] == "fin":
-                    ShoutLog(last_week=True).finalize()
+            elif candi[1:4] == "fin":
+                ShoutLog(weeks_back=1).finalize()
 
-                elif candi[1:4] == "sum":
-                    self.summarize()
+            elif candi[1:4] == "sum":
+                self.summarize()
 
-                elif candi[1:4] == "bug":
-                    bug = input("What's the bug? Tell me what's a-happenin'!\n")
+            elif candi[1:4] == "bug":
+                bug = input("What's the bug? Tell me what's a-happenin'!\n")
 
-                    if bug.lower() != "/cancel":
-                        rate = float(input("What was the bounty on that bug's head? $"))
-                        self.write_bug_report(bug, rate)
+                if bug.lower() != "/cancel":
+                    rate = float(input("What was the bounty on that bug's head? $"))
+                    self.write_bug_report(bug, rate)
 
-                elif candi[1:5] == "test":
-                    self.write_test_entry()
+            elif candi[1:5] == "test":
+                self.write_test_entry()
 
-                elif candi[1:5] == "lost":
-                    number_lost = int(input("Insert how many lost shouts?\n"))
-                    self.insert_lost_shouts(number_lost)
+            elif candi[1:5] == "lost":
+                number_lost = int(input("Insert how many lost shouts?\n"))
+                self.insert_lost_shouts(number_lost)
 
-                elif candi[1:5] == "addu":
-                    self.write_username(input("Username to add: "))
+            elif candi[1:5] == "addu":
+                self.write_username(input("Username to add: "))
 
-                elif candi[1:5] == "read":
-                    self.read_log()
+            elif candi[1:5] == "read":
+                # Ask the user how many weeks back to look for the shout log of, then make a ShoutLog
+                # for that week and read the file.
+                ShoutLog(weeks_back=int(input("How many weeks back do you want to read? "))).read_log()
 
-                else:
-                    print("Command not recognized.")
-
-            # Otherwise, treat the string as a shout.
             else:
-                self.write_log_entry(candi)
+                print("Command not recognized.")
+
+        # Otherwise, treat the string as a shout.
+        else:
+            self.write_log_entry(candi)
 
 
 if __name__ == "__main__":
