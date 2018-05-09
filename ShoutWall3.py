@@ -15,9 +15,7 @@ log_dir_string = os.path.dirname(os.path.realpath(__file__)) + "/Shout Logs/"
 class ShoutLog:
     def __init__(self, weeks_back=0, pay_rate=0.10):
         self.rate = pay_rate
-        self.week_name = self.get_week_name(
-            1 if date.today().weekday() == 6 and datetime.now().hour == 0 or weeks_back == 1 else 0)
-        # Look for "last week" if Pacific time is still in last week relative to my time.
+        self.week_name = self.get_week_name(weeks_back)
 
         self.filename = log_dir_string + self.week_name + '.klat'
 
@@ -340,7 +338,9 @@ class ShoutLog:
                 print("/bug: log a bug report\n" +
                       "/test: log a Shout Wall test attended\n" +
                       "/summary: refresh the statistics and display the summary\n" +
-                      "/lost: insert a number of lines into the current log of lost shouts\n")
+                      "/lost: insert a number of lines into the current log of lost shouts\n" +
+                      "/addu: add a used username to include in the final invoice\n" +
+                      "/read: read the shout wall from n weeks ago. Default is current week")
 
             elif candi[1:4] == "fin":
                 ShoutLog(weeks_back=1).finalize()
@@ -382,7 +382,8 @@ if __name__ == "__main__":
     print("**************************************************************\n" +
           "Shout Wall Log Python Model 2.0")
 
-    shoutLog = ShoutLog()
+    shoutLog = ShoutLog(weeks_back=1 if date.today().weekday() == 6 and datetime.now().hour == 0 else 0)
+    # Compensates for the fact that my client uses Pacific Time & uses the appropriate log for that.
     print("Log file for " + shoutLog.week_name + ".")
 
     cmd = input("{:3d}".format(shoutLog.shouts) + "> ")
