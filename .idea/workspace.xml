@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="83b967e8-420f-4990-8fde-d75dbd7039ba" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/Shout Logs/05.06-05.12.klat" afterPath="$PROJECT_DIR$/Shout Logs/05.06-05.12.klat" />
       <change beforePath="$PROJECT_DIR$/ShoutWall3.py" afterPath="$PROJECT_DIR$/ShoutWall3.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -17,8 +18,8 @@
       <file leaf-file-name="ShoutWall3.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/ShoutWall3.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="711">
-              <caret line="391" column="0" lean-forward="true" selection-start-line="391" selection-start-column="0" selection-end-line="391" selection-end-column="0" />
+            <state relative-caret-position="591">
+              <caret line="389" column="13" lean-forward="true" selection-start-line="389" selection-start-column="13" selection-end-line="389" selection-end-column="13" />
               <folding>
                 <element signature="e#124#170#0" expanded="true" />
               </folding>
@@ -197,7 +198,21 @@
       <option name="project" value="LOCAL" />
       <updated>1525849885294</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="&quot;Prettified&quot; the input prompt.&#10;&#10;Just made the number pad to 3 spaces long.">
+      <created>1525894160161</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1525894160161</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Fixed the creation of Shout Log objects for weeks other than the current one and last week! /read now works as it should (#13)!">
+      <created>1525900679194</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1525900679194</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -241,7 +256,9 @@
     <MESSAGE value="Fixed minor, minor bug with the compiling of the bug &amp; test invoices.&#10;&#10;Creating the shout log object would have issues with blank lines in the saved shout log file. It didn't impact anything if there weren't saved bugs or tests, but this is more secure." />
     <MESSAGE value="Added ability to read the current shout log - issue #13, but not all of it." />
     <MESSAGE value="Removed '.' as a command char (#14). Made some changes toward #13." />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed '.' as a command char (#14). Made some changes toward #13." />
+    <MESSAGE value="&quot;Prettified&quot; the input prompt.&#10;&#10;Just made the number pad to 3 spaces long." />
+    <MESSAGE value="Fixed the creation of Shout Log objects for weeks other than the current one and last week! /read now works as it should (#13)!" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed the creation of Shout Log objects for weeks other than the current one and last week! /read now works as it should (#13)!" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -327,8 +344,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/ShoutWall3.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="711">
-          <caret line="391" column="0" lean-forward="true" selection-start-line="391" selection-start-column="0" selection-end-line="391" selection-end-column="0" />
+        <state relative-caret-position="591">
+          <caret line="389" column="13" lean-forward="true" selection-start-line="389" selection-start-column="13" selection-end-line="389" selection-end-column="13" />
           <folding>
             <element signature="e#124#170#0" expanded="true" />
           </folding>

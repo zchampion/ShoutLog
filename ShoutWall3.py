@@ -368,7 +368,20 @@ class ShoutLog:
             elif candi[1:5] == "read":
                 # Ask the user how many weeks back to look for the shout log of, then make a ShoutLog
                 # for that week and read the file.
-                ShoutLog(weeks_back=int(input("How many weeks back do you want to read? "))).read_log()
+                candi = candi.split()
+
+                if len(candi) > 1:
+                    try:
+                        wb = int(candi[1])
+
+                    except Exception as e:
+                        print("Invalid command: " + str(e))
+                        wb = int(input("How many weeks back do you want to read? "))
+
+                else:
+                    wb = int(input("How many weeks back do you want to read? "))
+
+                ShoutLog(weeks_back=wb).read_log()
 
             else:
                 print("Command not recognized.")
