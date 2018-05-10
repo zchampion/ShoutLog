@@ -399,7 +399,7 @@ if __name__ == "__main__":
     # Compensates for the fact that my client uses Pacific Time & uses the appropriate log for that.
     print("Log file for " + shoutLog.week_name + ".")
 
-    cmd = input("{:3d}".format(shoutLog.shouts) + "> ")
+    cmd = input("<{:03d}>  ".format(shoutLog.shouts + 1))
     while cmd != "/done":
         shoutLog.process_candi(cmd)
-        cmd = input("{:3d}".format(shoutLog.shouts) + "> ")
+        cmd = input("<{:03d}>  ".format(shoutLog.shouts + 1))
