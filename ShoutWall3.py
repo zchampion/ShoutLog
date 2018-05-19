@@ -400,7 +400,11 @@ class ShoutLog:
                       "/read: read the shout wall from n weeks ago. Default is current week")
 
             elif candi[1:4] == "fin":
-                ShoutLog(weeks_back=1).finalize()
+                if len(candi) == 4:
+                    ShoutLog(weeks_back=1).finalize()
+
+                else:
+                    ShoutLog(weeks_back=1).finalize_combined(int(input("How many weeks back should be combined?\n")))
 
             elif candi[1:4] == "sum":
                 self.summarize()
