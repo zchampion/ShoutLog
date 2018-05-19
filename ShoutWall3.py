@@ -5,6 +5,7 @@
 """
 from datetime import date, datetime, timedelta
 import os
+import re
 
 # User's username and PayPal email address, only used for putting together the invoice.
 default_username = "TheFluffyQ"
@@ -243,7 +244,7 @@ class ShoutLog:
         self.bugs = self.count_bug_reports()
         self.tests = self.count_tests()
         self.invoice = self.get_invoice()
-        print(str(self))
+        print('\n' + str(self) + '\n')
 
     def finalize(self):
         finalized = False
@@ -252,7 +253,7 @@ class ShoutLog:
             log = open(self.filename)
 
             for line in log:
-                if line == '{:*^41}'.format(' Final Invoice ') + '\n':
+                if line.startswith('*'):
                     finalized = True
 
             log.close()
@@ -302,6 +303,62 @@ class ShoutLog:
 
         else:
             print("Log \'{}\' already finalized.".format(self.filename))
+
+    def finalize_combined(self, weeks_back=1):
+        # need as an argument the number of weeks back to make a combined invoice for
+        # get the first day from the name of the furthest back log, start the name of the invoice
+        # combine it with the last day from the last log - last week - finish the name of the invoice
+        #
+        # with a decrementing loop for each log (n weeks back until 1 week back):
+        #     check to make sure that the log isn't already finalized. If one is, ask the user if they want to continue.
+        #     Otherwise, get the totals for the log and add it to a total.
+        #     mark the log as finalized
+        #
+        # print total invoice to the last log file
+
+        combined_name = self.get_week_name(weeks_back).split('-')[0] + '-' + self.get_week_name(1).split('-')[1]
+        invoice, shouts, bugs, tests = 0, 0, 0, 0
+        names = []
+        fin = False
+
+        for week in range(weeks_back, 1, -1):
+            week_log = ShoutLog(weeks_back=week)
+
+            invoice += week_log.invoice
+            shouts += week_log.shouts
+            bugs += week_log.bugs
+            tests += week_log.tests
+            names += week_log.usernames
+
+            with open(week_log.filename) as candi:
+                for line in candi:
+                    if line.startswith('*'):
+                        fin = True
+
+        if fin and not input("One or more of the logs is already finalized.\nContinue?  ").upper().startswith("Y"):
+            print("Cancelling combined finalization.")
+
+        else:
+            invoice_string = '{:*^41}'.format(' Final Invoice ') + '\n' + \
+                             "Shout Wall Invoice - Week of {}\n".format(combined_name) + \
+                             "Total amount requested: ${:.2f}\n".format(invoice) + \
+                             "PayPal email address: {}\n".format(Email) + \
+                             "Total shouts completed: {:3}\n".format(shouts) + \
+                             "Username(s) used: {}\n".format(", ".join(names))
+
+            if self.bugs > 0:
+                invoice_string += "Bug Reports: " + str(self.bugs) + '\n'
+
+            if self.tests > 0:
+                invoice_string += "Shout Wall Tests: " + str(self.tests) + '\n'
+
+            try:
+                with open(ShoutLog(weeks_back=1).filename, 'w') as log:
+                    log.write(invoice_string)
+                    print(invoice_string)
+
+            except Exception as e:
+                print("Something went wrong with opening the file.\n" + str(e))
 
     def insert_lost_shouts(self, num):
         for _ in range(num):
