@@ -321,7 +321,7 @@ class ShoutLog:
         names = []
         fin = False
 
-        for week in range(weeks_back, 1, -1):
+        for week in range(weeks_back, 0, -1):
             week_log = ShoutLog(weeks_back=week)
 
             invoice += week_log.invoice
@@ -329,6 +329,7 @@ class ShoutLog:
             bugs += week_log.bugs
             tests += week_log.tests
             names += week_log.usernames
+            names = list(set(names))
 
             with open(week_log.filename) as candi:
                 for line in candi:
@@ -340,7 +341,7 @@ class ShoutLog:
 
         else:
             invoice_string = '{:*^41}'.format(' Final Invoice ') + '\n' + \
-                             "Shout Wall Invoice - Week of {}\n".format(combined_name) + \
+                             "Shout Wall Combined Invoice - Weeks of {}\n".format(combined_name) + \
                              "Total amount requested: ${:.2f}\n".format(invoice) + \
                              "PayPal email address: {}\n".format(Email) + \
                              "Total shouts completed: {:3}\n".format(shouts) + \
@@ -353,8 +354,16 @@ class ShoutLog:
                 invoice_string += "Shout Wall Tests: " + str(self.tests) + '\n'
 
             try:
-                with open(ShoutLog(weeks_back=1).filename, 'w') as log:
-                    log.write(invoice_string)
+                log_contents = ""
+                curr_log = ShoutLog(weeks_back=1)
+
+                with open(curr_log.filename) as backup:
+                    for line in backup:
+                        if line[0] == '[':
+                            log_contents += line
+
+                with open(curr_log.filename, 'w') as log:
+                    log.write(invoice_string + '\n' + log_contents)
                     print(invoice_string)
 
             except Exception as e:
@@ -404,7 +413,7 @@ class ShoutLog:
                     ShoutLog(weeks_back=1).finalize()
 
                 else:
-                    ShoutLog(weeks_back=1).finalize_combined(int(input("How many weeks back should be combined?\n")))
+                    ShoutLog(weeks_back=1).finalize_combined(int(candi.split()[1]))
 
             elif candi[1:4] == "sum":
                 self.summarize()
