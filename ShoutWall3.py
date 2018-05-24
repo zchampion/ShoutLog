@@ -5,7 +5,6 @@
 """
 from datetime import date, datetime, timedelta
 import os
-import re
 
 # User's username and PayPal email address, only used for putting together the invoice.
 default_username = "TheFluffyQ"
@@ -55,7 +54,7 @@ class ShoutLog:
         print("Creating \"" + self.filename + "\"")
         read_shouts = open(self.filename, 'w')
         read_shouts.write("Shout Wall Log - Week of " + self.week_name + "\n" +
-                          '*' * 37 + '\n')
+                          '=' * 37 + '\n')
         read_shouts.close()
 
     def count_shouts(self):
