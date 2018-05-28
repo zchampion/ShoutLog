@@ -252,7 +252,7 @@ class ShoutLog:
             log = open(self.filename)
 
             for line in log:
-                if line.startswith('*'):
+                if line == '{:*^41}\n'.format(' Final Invoice '):
                     finalized = True
 
             log.close()
@@ -332,7 +332,7 @@ class ShoutLog:
 
             with open(week_log.filename) as candi:
                 for line in candi:
-                    if line.startswith('*'):
+                    if line == '{:*^41}\n'.format(' Final Invoice '):
                         fin = True
 
         if fin and not input("One or more of the logs is already finalized.\nContinue?  ").upper().startswith("Y"):
